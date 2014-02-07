@@ -1,6 +1,11 @@
 #!/usr/bin/python
 
 import sys, signal, os, subprocess, syslog
+import  traceback
+
+def x(text):
+	with open('somefile.txt', 'a') as the_file:
+		the_file.write(str(text)) 
 
 
 # Verdicts
@@ -47,6 +52,9 @@ def compare_files(a, b):
 sourcefile = sys.argv[1]
 problem = sys.argv[2]
 PROBLEMDIR = sys.argv[3]
+#x(sourcefile+"\n")
+#x(problem+"\n")
+#x(PROBLEMDIR+"\n")
 path = "/".join(sourcefile.split("/")[:-1])
 ext = sourcefile.split(".")[1]	
 
@@ -77,10 +85,10 @@ if(ext in ["c", "cpp", "java", "cs", "php", "rb"]):
 	if(r):
 		debug("Compile Error")
 		sys.exit(verdict['COMPILE_ERROR'])
+		
 
 file = sourcefile.split("/")[-1]
-infile = PROBLEMDIR + "/" + problem + "/in"
-outfile = path + "/op"
+
 
 
 # Extend this for added language support
@@ -101,26 +109,68 @@ elif(ext == "php"):
 
 # Run
 
+inputdir = PROBLEMDIR + "/" + problem + "/input"
+outputdir = PROBLEMDIR + "/" + problem + "/output"
+
+listofdir = os.listdir("./"+inputdir)
+
+numInput = len(listofdir)
+
+infile = PROBLEMDIR + "/" + problem + "/in"
+outfile = path + "/op"
 
 
-debug("Running...")
-signal.signal(signal.SIGALRM, alarm_callback)
-signal.alarm(TIME_LIMIT)
 
 
-p = subprocess.Popen(run, stdin=open(infile,"r"), stdout=open(outfile,"w"), stderr=open("/dev/null", "w"), cwd=path)
+for i in range(numInput):
 
-r = os.waitpid(p.pid, 0)[1]
-signal.alarm(0)
-debug("Exit status : %d" % r)
 
-# Compare output with expected output
-outputProduced = path + "/op"
-outputExpected = "./" + PROBLEMDIR + "/" + problem + "/out"
+	infile = inputdir + "/in" + str(i)
+	outfile = path + "/op"
+	debug("Running...")
+	signal.signal(signal.SIGALRM, alarm_callback)
+	signal.alarm(TIME_LIMIT)
 
-if( compare_files(outputProduced, outputExpected) == True ):
-	debug("Correct")
-	sys.exit(verdict['CORRECT'])
-else:
-	debug("Wrong")
-	sys.exit(verdict['WRONG'])
+
+	p = subprocess.Popen(run, stdin=open(infile,"r"), stdout=open(outfile,"w"), stderr=open("/dev/null", "w"), cwd=path)
+
+	r = os.waitpid(p.pid, 0)[1]
+	signal.alarm(0)
+	debug("Exit status : %d" % r)
+
+	# Compare output with expected output
+	outputProduced = path + "/op"
+	outputExpected = "./" + outputdir + "/out" + str(i)
+
+	if( compare_files(outputProduced, outputExpected) == False ):
+		debug("Wrong")
+		sys.exit(verdict['WRONG'])
+
+	
+	
+debug("Correct")
+sys.exit(verdict['CORRECT'])
+
+
+#for i in range(int(numInput)):	
+#	debug("Running...")
+#	signal.signal(signal.SIGALRM, alarm_callback)
+#	signal.alarm(TIME_LIMIT)
+
+
+#	p = subprocess.Popen(run, stdin=open(infile,"r"), stdout=open(outfile,"w"), stderr=open("/dev/null", "w"), cwd=path)
+
+#	r = os.waitpid(p.pid, 0)[1]
+#	signal.alarm(0)
+#	debug("Exit status : %d" % r)
+
+#	# Compare output with expected output
+#	outputProduced = path + "/op"
+#	outputExpected = "./" + PROBLEMDIR + "/" + problem + "/out"
+
+#	if( compare_files(outputProduced, outputExpected) == True ):
+#		debug("Correct")
+#		sys.exit(verdict['CORRECT'])
+#	else:
+#		debug("Wrong")
+#		sys.exit(verdict['WRONG'])
