@@ -102,7 +102,7 @@ include('settings.php');
 					move_uploaded_file($_FILES[$file]["tmp_name"], $destFile);
 
 					//----Invoke online judge-----------
-					exec("./onj $destFile $file", $output, $verdict);		
+					exec("./onj $destFile $file $PROBLEMDIR", $output, $verdict);		
 					
 					$cn = mysql_connect('localhost', $DBUSER, $DBPASS);
 					mysql_select_db($DBNAME, $cn);

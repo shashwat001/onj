@@ -6,11 +6,11 @@
 */
 
 	//The user name of your database
-	$DBUSER = 'onj';
+	$DBUSER = 'dbuser';
 	//The password of your database
-	$DBPASS = 'onjpass';
+	$DBPASS = 'dbpass';
 	//The name of the database
-	$DBNAME = 'onj';
+	$DBNAME = 'dbname';
 
 	//The point values of the problems
 	//Set it to the values you wish to use
@@ -18,10 +18,10 @@
 	$points = array(10,25,25,25,50);
 
 	//Start time of the contest in the format 'YYYY-MM-DD HH:MM:SS'
-	$startTime = date_create('2014-02-07 09:16:42');
+	$startTime = date_create('STARTTIME');
 
 	//End time of the contest in the format 'YYYY-MM-DD HH:MM:SS'
-	$endTime = date_create('2014-02-07 10:15:42');
+	$endTime = date_create('ENDTIME');
 
 	//Interval between refreshes of the leaderboard (milliseconds)
 	$getLeaderInterval = 10000;
@@ -39,6 +39,6 @@
 		$running = true;
 
 	//The following variables hold values of the code and problem directories. These directories are renamed with random strings for security purposes.
-	$CODEDIR = 'code_ce1c41112599b06eef29';
-	$PROBLEMDIR = 'problems_ce1c41112599b06eef29';
+	$CODEDIR = 'codedir';
+	$PROBLEMDIR = 'problemdir';
 ?>

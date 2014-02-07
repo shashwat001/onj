@@ -5,13 +5,13 @@
 #
 
 # Your database username
-DBUSER=dbuser
+DBUSER="onj"
 
 # Your database password
-DBPASS=dbpass
+DBPASS="onjpass"
 
 # Database name
-DBNAME=onj
+DBNAME="onj"
 
 # Contest start time (by default set to 1 minute after you run setup)
 # Format YYYY-MM-DD HH:MM:SS
@@ -31,6 +31,9 @@ chmod 666 problems*/*/statement
 chmod 755 onj
 
 # This replaces constants in settings.php and dbinit.sql
+
+cp settingsbak.php settings.php
+cp dbinitbak.sql dbinit.sql
 sed -i "s/dbuser/$DBUSER/g" settings.php
 sed -i "s/dbpass/$DBPASS/g" settings.php
 sed -i "s/dbname/$DBNAME/g" settings.php dbinit.sql
@@ -51,11 +54,11 @@ JUNK=$(date | md5sum | md5sum)
 APPEND=${JUNK:0:20}
 
 # Uncomment these when you want to use random strings for code and problem directories
-#CODEDIR=code_$APPEND
-#PROBLEMDIR=problems_$APPEND
+CODEDIR=code_$APPEND
+PROBLEMDIR=problems_$APPEND
 
-CODEDIR=code
-PROBLEMDIR=problems
+#CODEDIR=code
+#PROBLEMDIR=problems
 
 sed -i "s/codedir/$CODEDIR/g" settings.php
 sed -i "s/problemdir/$PROBLEMDIR/g" settings.php onj
